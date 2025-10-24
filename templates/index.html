@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Travel Itinerary Planner</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        background-color: #f0f0f0;
+      }
+      h1 {
+        color: #333;
+      }
+      form label {
+        display: block;
+        margin-top: 1rem;
+        font-weight: bold;
+      }
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 0.4rem;
+        font-size: 1rem;
+        margin-top: 0.25rem;
+      }
+      button {
+        margin-top: 1rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
+        background-color: #2a7ae2;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 0.25rem;
+      }
+      button:hover {
+        background-color: #1c57b8;
+      }
+      .error {
+        margin-top: 1rem;
+        color: red;
+        font-weight: bold;
+      }
+      .output-section {
+        background: white;
+        padding: 1rem;
+        margin-top: 1.5rem;
+        border-radius: 0.25rem;
+        box-shadow: 0 0 10px #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AI Travel Itinerary Planner</h1>
+
+    <form
+      method="POST"
+      action="/"
+    >
+      <label for="origin">Origin City:</label>
+      <input
+        id="origin"
+        name="origin"
+        type="text"
+        required
+        value="{{ origin | default('') }}"
+        placeholder="Enter your starting city"
+      />
+
+      <label for="destination">Destination City:</label>
+      <input
+        id="destination"
+        name="destination"
+        type="text"
+        required
+        value="{{ destination | default('') }}"
+        placeholder="Where do you want to go?"
+      />
+
+      <label for="duration">Trip Duration (days):</label>
+      <input
+        id="duration"
+        name="duration"
+        type="number"
+        min="1"
+        max="30"
+        required
+        value="{{ duration | default('') }}"
+        placeholder="Enter number of days (1-30)"
+      />
+
+      <button type="submit">Generate Itinerary</button>
+    </form>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %} {% if weather %}
+    <div class="output-section">
+      <h2>Weather Forecast</h2>
+      <p>{{ weather | safe }}</p>
+    </div>
+    {% endif %} {% if itinerary %}
+    <div class="output-section">
+      <h2>Travel Itinerary</h2>
+      <p>{{ itinerary | safe }}</p>
+    </div>
+    {% endif %}
+  </body>
+</html>
