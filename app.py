@@ -1,7 +1,9 @@
 """Web app for AI-generated travel itineraries"""
 
+import markdown
 from flask import Flask, render_template, request
 from logic import is_valid_city, display_current_weather, generate_itinerary
+
 
 app = Flask(__name__)
 
@@ -9,6 +11,7 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def index():
     itinerary = None
+    itinerary_html = None
     weather = []
     error = None
     origin = ""
@@ -40,12 +43,18 @@ def index():
             # ---- Generate itinerary ----
             itinerary = generate_itinerary(origin, destination, int(duration))
 
+    # Convert Markdown to HTML here, after POST logic, before rendering template
+    if itinerary:
+        itinerary_html = markdown.markdown(itinerary)
+    else:
+        itinerary_html = None
+
     # Join weather details for display
     weather_summary = "<br/>".join(weather) if weather else None
     # Render the HTML template. Pass any variables to be displayed in HTML.
     return render_template(
         "index.html",
-        itinerary=itinerary,
+        itinerary=itinerary_html,
         weather=weather_summary,
         error=error,
         origin=origin,
